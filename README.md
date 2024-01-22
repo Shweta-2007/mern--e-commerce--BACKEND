@@ -136,3 +136,5 @@ products,
 - In app.ts => const port = process.env.PORT;
 - Now make order schema and API
 - While creating new order, we want to reduce the given stock by the quantity which we have ordered. So for reducing the stock, we will make a function in features and use that in order controller.
+
+\*\* Next Step: Coupon schema && API
