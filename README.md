@@ -138,3 +138,5 @@ products,
 - While creating new order, we want to reduce the given stock by the quantity which we have ordered. So for reducing the stock, we will make a function in features and use that in order controller.
 
 \*\* Next Step: Coupon schema && API
+
+- created schema
