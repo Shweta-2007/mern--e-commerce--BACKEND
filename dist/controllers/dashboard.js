@@ -74,7 +74,11 @@ exports.getDashboardStats = (0, error_1.TryCatch)(async (req, res, next) => {
                 $lte: today,
             },
         });
-        const [thisMonthProducts, thisMonthUsers, thisMonthOrders, lastMonthProducts, lastMonthUsers, lastMonthOrders, productsCount, usersCount, allOrders, lastSixMonthOrders, categories,] = await Promise.all([
+        // Top transactions
+        const latestTransactionsPromise = orders_1.Order.find({})
+            .select(["orderItems", "discount", "total", "status"])
+            .limit(4);
+        const [thisMonthProducts, thisMonthUsers, thisMonthOrders, lastMonthProducts, lastMonthUsers, lastMonthOrders, productsCount, usersCount, allOrders, lastSixMonthOrders, categories, femaleUsersCount, latestTransactions,] = await Promise.all([
             thisMonthProductsPromise,
             thisMonthUsersPromise,
             thisMonthOrdersPromise,
@@ -86,6 +90,8 @@ exports.getDashboardStats = (0, error_1.TryCatch)(async (req, res, next) => {
             orders_1.Order.find({}).select("total"), // This will get the total of all Orders.
             lastSixMonthOrdersPromise,
             product_1.Product.distinct("category"),
+            user_1.User.countDocuments({ gender: "female" }),
+            latestTransactionsPromise,
         ]);
         const thisMonthRevenue = thisMonthOrders.reduce((total, order) => {
             return total + (order.total || 0);
@@ -129,6 +135,18 @@ exports.getDashboardStats = (0, error_1.TryCatch)(async (req, res, next) => {
                 [category]: Math.round((categoriesCount[i] / productsCount) * 100),
             });
         });
+        // Gender-ratio
+        const userRatio = {
+            male: usersCount - femaleUsersCount,
+            female: femaleUsersCount,
+        };
+        const modifiedTransactions = latestTransactions.map((i) => ({
+            _id: i._id,
+            discount: i.discount,
+            amount: i.total,
+            quantity: i.orderItems.length,
+            status: i.status,
+        }));
         stats = {
             categoryCount,
             percentageChange,
@@ -137,6 +155,8 @@ exports.getDashboardStats = (0, error_1.TryCatch)(async (req, res, next) => {
                 order: orderMonthCounts,
                 revenue: orderMonthlyRevenue,
             },
+            userRatio,
+            latestTransactions: modifiedTransactions,
         };
     }
     return res.status(200).json({

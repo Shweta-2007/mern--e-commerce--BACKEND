@@ -151,3 +151,5 @@ products,
     products
     revenue & transaction,
     inventory
+    gender ratio
+    top transaction
