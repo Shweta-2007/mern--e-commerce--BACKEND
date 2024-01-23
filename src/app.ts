@@ -10,6 +10,7 @@ import userRoute from "./routes/user";
 import productRoute from "./routes/products";
 import orderRoute from "./routes/orders";
 import paymentRoute from "./routes/payment";
+import dashboardRoute from "./routes/dashboard";
 
 config({
   path: "./.env", // path of env file
@@ -40,6 +41,7 @@ app.use("/api/v1/user", userRoute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/payment", paymentRoute);
+app.use("/api/v1/dashboard", dashboardRoute);
 
 app.use("/uploads", express.static("uploads"));
 // Middleware for error handling, This should be placed at last.

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newCoupon = void 0;
+exports.deleteCoupon = exports.allCoupons = exports.applyDiscount = exports.newCoupon = void 0;
 const error_1 = require("../middlewares/error");
 const coupon_1 = require("../models/coupon");
 const utility_class_1 = __importDefault(require("../utils/utility-class"));
@@ -15,5 +15,35 @@ exports.newCoupon = (0, error_1.TryCatch)(async (req, res, next) => {
     return res.status(201).json({
         success: true,
         message: `Coupon Created ${code} Successfully`,
+    });
+});
+exports.applyDiscount = (0, error_1.TryCatch)(async (req, res, next) => {
+    const { coupon } = req.query;
+    const discount = await coupon_1.Coupon.findOne({ code: coupon });
+    if (!discount)
+        return next(new utility_class_1.default("Invalid Coupon Code", 400));
+    return res.status(200).json({
+        success: true,
+        discount: discount.amount,
+    });
+});
+exports.allCoupons = (0, error_1.TryCatch)(async (req, res, next) => {
+    const code = await coupon_1.Coupon.find();
+    if (!code)
+        return next(new utility_class_1.default("No Coupon Code Available", 400));
+    return res.status(200).json({
+        success: true,
+        code,
+    });
+});
+exports.deleteCoupon = (0, error_1.TryCatch)(async (req, res, next) => {
+    const { id } = req.params;
+    const code = await coupon_1.Coupon.findById(id);
+    if (!code)
+        return next(new utility_class_1.default("Invalid Coupon Code", 400));
+    await code.deleteOne();
+    return res.status(200).json({
+        success: true,
+        message: `Coupon ${code} Deleted Successfully`,
     });
 });
