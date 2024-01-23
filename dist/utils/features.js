@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reduceStock = exports.invalidateCache = exports.connectDB = void 0;
+exports.calculatePercentage = exports.reduceStock = exports.invalidateCache = exports.connectDB = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = require("../app");
 const product_1 = require("../models/product");
@@ -52,3 +52,11 @@ const reduceStock = async (orderItems) => {
     }
 };
 exports.reduceStock = reduceStock;
+// DASHBOARD STATISTICS FUNCTIONS
+const calculatePercentage = (thisMonth, lastMonth) => {
+    if (lastMonth === 0)
+        return thisMonth * 100;
+    const percent = ((thisMonth - lastMonth) / lastMonth) * 100;
+    return Number(percent.toFixed(0));
+};
+exports.calculatePercentage = calculatePercentage;

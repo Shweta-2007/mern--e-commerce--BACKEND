@@ -15,6 +15,7 @@ const user_1 = __importDefault(require("./routes/user"));
 const products_1 = __importDefault(require("./routes/products"));
 const orders_1 = __importDefault(require("./routes/orders"));
 const payment_1 = __importDefault(require("./routes/payment"));
+const dashboard_1 = __importDefault(require("./routes/dashboard"));
 (0, dotenv_1.config)({
     path: "./.env", // path of env file
 });
@@ -37,6 +38,7 @@ app.use("/api/v1/user", user_1.default);
 app.use("/api/v1/product", products_1.default);
 app.use("/api/v1/order", orders_1.default);
 app.use("/api/v1/payment", payment_1.default);
+app.use("/api/v1/dashboard", dashboard_1.default);
 app.use("/uploads", express_1.default.static("uploads"));
 // Middleware for error handling, This should be placed at last.
 app.use(error_1.errorMiddleware);

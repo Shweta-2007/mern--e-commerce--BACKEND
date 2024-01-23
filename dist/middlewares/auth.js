@@ -16,6 +16,6 @@ exports.adminOnly = (0, error_1.TryCatch)(async (req, res, next) => {
     if (!user)
         return next(new utility_class_1.default("Please Provide Correct ID", 401));
     if (user.role !== "admin")
-        return next(new utility_class_1.default("Only Admin can access that", 401));
+        return next(new utility_class_1.default("Only Admin can access that", 403));
     next();
 });

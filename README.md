@@ -139,4 +139,7 @@ products,
 
 \*\* Next Step: Coupon schema && API
 
-- created schema
+- made api of coupon
+  \*\* next step: Dashboard statistics API
+  - no need to make model for dashboard
+  - in routes, make a file of dashboard.ts
