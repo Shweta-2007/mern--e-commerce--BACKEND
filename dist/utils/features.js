@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calculatePercentage = exports.reduceStock = exports.invalidateCache = exports.connectDB = void 0;
+exports.getInventories = exports.calculatePercentage = exports.reduceStock = exports.invalidateCache = exports.connectDB = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = require("../app");
 const product_1 = require("../models/product");
@@ -60,3 +60,18 @@ const calculatePercentage = (thisMonth, lastMonth) => {
     return Number(percent.toFixed(0));
 };
 exports.calculatePercentage = calculatePercentage;
+const getInventories = async ({ categories, productsCount, }) => {
+    const categoriesCountPromise = categories.map((category) => {
+        return product_1.Product.countDocuments({ category });
+    });
+    const categoriesCount = await Promise.all(categoriesCountPromise);
+    const categoryCount = [];
+    categories.forEach((category, i) => {
+        categoryCount.push({
+            // laptop:1
+            [category]: Math.round((categoriesCount[i] / productsCount) * 100),
+        });
+    });
+    return categoryCount;
+};
+exports.getInventories = getInventories;

@@ -141,6 +141,7 @@ products,
 
 - made api of coupon
   \*\* next step: Dashboard statistics API
+
   - no need to make model for dashboard
   - in routes, make a file of dashboard.ts
   - in dashboard controllers: first make getDashboardStats function
@@ -153,3 +154,7 @@ products,
     inventory
     gender ratio
     top transaction
+
+    \*\* next step: chart API
+
+    - pie cart API
