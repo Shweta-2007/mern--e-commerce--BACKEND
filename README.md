@@ -143,3 +143,11 @@ products,
   \*\* next step: Dashboard statistics API
   - no need to make model for dashboard
   - in routes, make a file of dashboard.ts
+  - in dashboard controllers: first make getDashboardStats function
+  - in this function, order of making things:
+    revenue
+    users
+    orders
+    products
+    revenue & transaction,
+    inventory
