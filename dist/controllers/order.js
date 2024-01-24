@@ -83,7 +83,7 @@ exports.newOrder = (0, error_1.TryCatch)(async (req, res, next) => {
         !total)
         return next(new utility_class_1.default("Please provide all the details", 400));
     await (0, features_1.reduceStock)(orderItems);
-    await (0, features_1.invalidateCache)({
+    (0, features_1.invalidateCache)({
         product: true,
         order: true,
         admin: true,
@@ -112,7 +112,7 @@ exports.processOrder = (0, error_1.TryCatch)(async (req, res, next) => {
             break;
     }
     await order.save();
-    await (0, features_1.invalidateCache)({
+    (0, features_1.invalidateCache)({
         product: false,
         order: true,
         admin: true,
@@ -130,7 +130,7 @@ exports.deleteOrder = (0, error_1.TryCatch)(async (req, res, next) => {
     if (!order)
         return next(new utility_class_1.default("Order Not Found", 404));
     await order.deleteOne();
-    await (0, features_1.invalidateCache)({
+    (0, features_1.invalidateCache)({
         product: false,
         order: true,
         admin: true,

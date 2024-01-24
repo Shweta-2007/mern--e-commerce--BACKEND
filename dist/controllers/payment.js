@@ -3,10 +3,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCoupon = exports.allCoupons = exports.applyDiscount = exports.newCoupon = void 0;
+exports.deleteCoupon = exports.allCoupons = exports.applyDiscount = exports.newCoupon = exports.createPaymentIntent = void 0;
+const app_1 = require("../app");
 const error_1 = require("../middlewares/error");
 const coupon_1 = require("../models/coupon");
 const utility_class_1 = __importDefault(require("../utils/utility-class"));
+exports.createPaymentIntent = (0, error_1.TryCatch)(async (req, res, next) => {
+    const { amount } = req.body;
+    if (!amount)
+        return next(new utility_class_1.default("Please enter amount", 400));
+    const paymentIntent = await app_1.stripe.paymentIntents.create({
+        amount: Number(amount) * 100,
+        currency: "inr",
+    });
+    return res.status(201).json({
+        success: true,
+        clientSecret: paymentIntent.client_secret,
+    });
+});
 exports.newCoupon = (0, error_1.TryCatch)(async (req, res, next) => {
     const { code, amount } = req.body;
     if (!code || !amount)
@@ -14,7 +28,7 @@ exports.newCoupon = (0, error_1.TryCatch)(async (req, res, next) => {
     await coupon_1.Coupon.create({ code, amount });
     return res.status(201).json({
         success: true,
-        message: `Coupon Created ${code} Successfully`,
+        message: `Coupon ${code} Created  Successfully`,
     });
 });
 exports.applyDiscount = (0, error_1.TryCatch)(async (req, res, next) => {

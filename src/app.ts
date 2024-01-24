@@ -11,19 +11,23 @@ import productRoute from "./routes/products";
 import orderRoute from "./routes/orders";
 import paymentRoute from "./routes/payment";
 import dashboardRoute from "./routes/dashboard";
+import Stripe from "stripe";
 
 config({
   path: "./.env", // path of env file
 });
 
 const port = process.env.PORT;
-console.log("PORT:", port);
 
 const mongoURI = process.env.MONGO_URI || "";
 // call the function which we have made to connect mongoDB in app.ts
-console.log("MONGO:", mongoURI);
+const stripeKey = process.env.STRIPE_KEY || "";
+
+// stripe payment
+
 connectDB(mongoURI);
 
+export const stripe = new Stripe(stripeKey);
 export const myCache = new NodeCache();
 
 const app = express();

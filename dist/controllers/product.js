@@ -91,7 +91,7 @@ exports.newProduct = (0, error_1.TryCatch)(async (req, res, next) => {
         photo: photo.path,
     });
     // Invalidate
-    await (0, features_1.invalidateCache)({ product: true });
+    (0, features_1.invalidateCache)({ product: true, admin: true });
     return res.status(201).json({
         success: true,
         message: "Product Created Successfully",
@@ -121,7 +121,11 @@ exports.updateProduct = (0, error_1.TryCatch)(async (req, res, next) => {
         product.category = category;
     await product.save();
     // Invalidate
-    await (0, features_1.invalidateCache)({ product: true, productId: String(product._id) });
+    (0, features_1.invalidateCache)({
+        product: true,
+        productId: String(product._id),
+        admin: true,
+    });
     return res.status(200).json({
         success: true,
         message: "Product Updated Successfully",
@@ -137,7 +141,11 @@ exports.deleteProduct = (0, error_1.TryCatch)(async (req, res, next) => {
     });
     await product.deleteOne();
     // Invalidate
-    await (0, features_1.invalidateCache)({ product: true, productId: String(product._id) });
+    (0, features_1.invalidateCache)({
+        product: true,
+        admin: true,
+        productId: String(product._id),
+    });
     return res.status(200).json({
         success: true,
         message: "Product Deleted Successfully",

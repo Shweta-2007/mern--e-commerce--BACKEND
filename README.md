@@ -158,3 +158,10 @@ products,
     \*\* next step: chart API
 
     - pie cart API
+    - bar chat API
+    - line chart API
+
+    \*\* stripe API Integration
+    npm i stripe
+
+    \*\* next step: firebase and google login, which is to be done in frontend part

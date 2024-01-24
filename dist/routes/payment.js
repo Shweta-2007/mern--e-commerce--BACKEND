@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const payment_1 = require("../controllers/payment");
 const auth_1 = require("../middlewares/auth");
 const app = express_1.default.Router();
+app.post("/create", payment_1.createPaymentIntent);
 // Route - /api/v1/payment/coupon/discount
 app.get("/discount", payment_1.applyDiscount);
 // Route - /api/v1/payment/coupon/new

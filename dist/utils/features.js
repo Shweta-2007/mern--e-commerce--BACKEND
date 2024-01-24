@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getInventories = exports.calculatePercentage = exports.reduceStock = exports.invalidateCache = exports.connectDB = void 0;
+exports.getChartData = exports.getInventories = exports.calculatePercentage = exports.reduceStock = exports.invalidateCache = exports.connectDB = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = require("../app");
 const product_1 = require("../models/product");
@@ -16,7 +16,7 @@ const connectDB = (uri) => {
         .catch((e) => console.log(e));
 };
 exports.connectDB = connectDB;
-const invalidateCache = async ({ product, order, admin, userId, orderId, productId, }) => {
+const invalidateCache = ({ product, order, admin, userId, orderId, productId, }) => {
     if (product) {
         const productKeys = [
             "latest-products",
@@ -38,6 +38,12 @@ const invalidateCache = async ({ product, order, admin, userId, orderId, product
         app_1.myCache.del(orderKeys);
     }
     if (admin) {
+        app_1.myCache.del([
+            "admin-stats",
+            "admin-pie-charts",
+            "admin-bar-charts",
+            "admin-line-charts",
+        ]);
     }
 };
 exports.invalidateCache = invalidateCache;
@@ -56,7 +62,7 @@ exports.reduceStock = reduceStock;
 const calculatePercentage = (thisMonth, lastMonth) => {
     if (lastMonth === 0)
         return thisMonth * 100;
-    const percent = ((thisMonth - lastMonth) / lastMonth) * 100;
+    const percent = (thisMonth / lastMonth) * 100;
     return Number(percent.toFixed(0));
 };
 exports.calculatePercentage = calculatePercentage;
@@ -75,3 +81,20 @@ const getInventories = async ({ categories, productsCount, }) => {
     return categoryCount;
 };
 exports.getInventories = getInventories;
+const getChartData = ({ length, docArr, today, property, }) => {
+    const data = new Array(length).fill(0);
+    docArr.forEach((i) => {
+        const creationDate = i.createdAt;
+        const monthDifference = (today.getMonth() - creationDate.getMonth() + 12) % 12;
+        if (monthDifference < length) {
+            if (property) {
+                data[length - monthDifference - 1] += i[property];
+            }
+            else {
+                data[length - monthDifference - 1] += 1;
+            }
+        }
+    });
+    return data;
+};
+exports.getChartData = getChartData;
